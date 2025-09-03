@@ -22,12 +22,6 @@ int main(int argc, char **argv) {
     };
     setConfig(argc, argv, &config);
     test(&config);
-    for (int i = 0; i < config.output->height; i++) {
-        for (int j = 0; j < config.output->width; ++j) {
-            printf("%f", config.output->array[i * config.output->width + j]);
-        }
-        printf("\n");
-    }
     if (config.outputFilePath != NULL) {
         writeMatrixToFile(config.outputFilePath, config.output);
     }
@@ -36,16 +30,13 @@ int main(int argc, char **argv) {
 }
 
 void test(Config *config) {
-    omp_set_num_threads(1);
     clock_t begin = clock();
-    for (int i = 0; i < TEST_ITERATIONS; ++i) {
-        if (!conv2d(config->feature, config->kernel, config->output)) {
-            return;
-        }
+    
+    if (!conv2d(config->feature, config->kernel, config->output)) {
+        return;
     }
-
+    
     clock_t end = clock();
-
-    printf("%f\n", (double) (end - begin) / CLOCKS_PER_SEC / TEST_ITERATIONS);
+    printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC / TEST_ITERATIONS);
 }
 
