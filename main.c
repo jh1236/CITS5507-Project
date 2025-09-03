@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include "convolve.h"
 #include "argHandler.h"
-#include <omp.h>
-#include <malloc.h>
 #include <time.h>
-#include <unistd.h>
-
-#define TEST_ITERATIONS 100
 
 
 void test(Config *config);
@@ -36,8 +31,8 @@ void test(Config *config) {
     if (!conv2d(config->feature, config->kernel, config->output)) {
         return;
     }
-    
+
     clock_t end = clock();
-    printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC / TEST_ITERATIONS);
+    printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC);
 }
 
