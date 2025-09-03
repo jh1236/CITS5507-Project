@@ -95,6 +95,7 @@ void setConfig(int argc, char **argv, Config *config) {
         config->output = newMatrix(config->feature->height, config->feature->width);
     } else {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
+        exit(EXIT_FAILURE);
     }
     if (kH > 0 || kW > 0) {
         if (kH == -1 || kW == -1) {
@@ -113,6 +114,7 @@ void setConfig(int argc, char **argv, Config *config) {
         config->kernel = readMatrixFromFile(config->kernelFilePath);
     } else {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
+        exit(EXIT_FAILURE);
     }
 }
 
