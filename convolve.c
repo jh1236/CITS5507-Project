@@ -13,12 +13,6 @@ int conv2dParallel(
         Matrix *output
 );
 
-int conv2dParallelFlat(
-        Matrix *feature,
-        Matrix *kernel,
-        Matrix *output
-);
-
 int conv2d(
         Matrix *feature,
         Matrix *kernel,
