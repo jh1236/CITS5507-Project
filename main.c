@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
             .feature = NULL,
     };
     setConfig(argc, argv, &config);
+    printf("Successfully Loaded config");
     test(&config);
     if (config.outputFilePath != NULL) {
         writeMatrixToFile(config.outputFilePath, config.output);
