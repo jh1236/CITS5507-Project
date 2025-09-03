@@ -2,11 +2,13 @@
 #include "convolve.h"
 #include "argHandler.h"
 #include <time.h>
+#include <omp.h>
 
 
 void test(Config *config);
 
 int main(int argc, char **argv) {
+    omp_set_num_threads(1);
     Config config = {
             .featureFilePath = NULL,
             .kernelFilePath = NULL,

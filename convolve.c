@@ -40,11 +40,10 @@ int conv2dParallel(
         return 0;
     }
     if (feature->height < kernel->height || feature->width < kernel->width) {
-        fprintf(stderr,"Feature is smaller than kernel");
-        return 0; 
+        fprintf(stderr, "Feature is smaller than kernel");
+        return 0;
     }
-//clang spits the dummy if this isn't default(none)
-#pragma omp parallel for default(none) shared(feature, kernel, output)
+
     for (long x = 0; x < feature->width; ++x) {
         for (long y = 0; y < feature->height; ++y) {
             float total = 0;
