@@ -6,12 +6,12 @@
 #define CITS5507PROJECT_MATRIX_H
 
 typedef struct matrix {
-    int height;
-    int width;
+    long height;
+    long width;
     float *array;
 } Matrix;
 
-Matrix *newMatrix(int H, int W);
+Matrix *newMatrix(long H, long W);
 
 void deleteMatrix(Matrix *matrix);
 

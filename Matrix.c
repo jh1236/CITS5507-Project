@@ -8,7 +8,7 @@
 #include "Matrix.h"
 
 
-Matrix *newMatrix(int H, int W) {
+Matrix *newMatrix(long H, long W) {
     float *array = malloc(sizeof(float) * H * W);
     Matrix *matrix = malloc(sizeof(Matrix));
     matrix->array = array;
@@ -32,7 +32,7 @@ void writeMatrixToFile(char *filePath, Matrix *matrix) {
     if (fptr == NULL) {
         exit(EXIT_FAILURE);
     }
-    fprintf(fptr, "%i %i", matrix->height, matrix->width);
+    fprintf(fptr, "%li %li", matrix->height, matrix->width);
 
     for (int i = 0; i < matrix->height; ++i) {
         fprintf(fptr, "\n");
@@ -54,8 +54,8 @@ Matrix *readMatrixFromFile(const char *filename) {
         exit(EXIT_FAILURE);
     }
 
-    int width, height;
-    if (fscanf(file, "%d %d", &width, &height) != 2) {
+    long width, height;
+    if (fscanf(file, "%li %li", &width, &height) != 2) {
         fprintf(stderr, "Failed to read matrix dimensions\n");
         fclose(file);
         exit(EXIT_FAILURE);

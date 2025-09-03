@@ -33,13 +33,22 @@ int conv2dParallel(
         Matrix *kernel,
         Matrix *output
 ) {
-    if (feature == NULL) return 0;
-    if (kernel == NULL) return 0;
-    if (output == NULL) return 0;
-    if (feature->height < kernel->height) return 0;
-    if (feature->width < kernel->width) return 0;
-//    if (kernel->width % 2 == 0) return 0;
-//    if (kernel->width % 2 == 0) return 0;
+    if (feature == NULL) {
+        fprintf(stderr, "No Passed Feature");
+        return 0;
+    }
+    if (kernel == NULL) {
+        fprintf(stderr, "No Passed Kernel");
+        return 0;
+    }
+    if (output == NULL) {
+        fprintf(stderr, "No Passed Output");
+        return 0;
+    }
+    if (feature->height < kernel->height || feature->width < kernel->width) {
+        fprintf(stderr,"Feature is smaller than kernel");
+        return 0; 
+    }
 //clang spits the dummy if this isn't default(none)
 #pragma omp parallel for default(none) shared(feature, kernel, output)
     for (long x = 0; x < feature->width; ++x) {

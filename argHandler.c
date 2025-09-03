@@ -9,6 +9,7 @@
 #include <malloc.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "argHandler.h"
@@ -55,16 +56,16 @@ void setConfig(int argc, char **argv, Config *config) {
                 break;
             }
             case 'H':
-                H = (int) strtol(optarg, NULL, 10);
+                H = strtol(optarg, NULL, 10);
                 break;
             case 'W':
-                W = (int) strtol(optarg, NULL, 10);
+                W = strtol(optarg, NULL, 10);
                 break;
             case 'x':
-                kH = (int) strtol(optarg, NULL, 10);
+                kH = strtol(optarg, NULL, 10);
                 break;
             case 'y':
-                kW = (int) strtol(optarg, NULL, 10);
+                kW = strtol(optarg, NULL, 10);
                 break;
 
             default:
