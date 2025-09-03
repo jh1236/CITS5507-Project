@@ -50,7 +50,7 @@ int conv2dParallel(
             float total = 0;
             for (long j = 0; j < kernel->width * kernel->height; ++j) {
                 const int kX = j % kernel->width;
-                const int kY = j / kernel->height;
+                const int kY = j / kernel->width;
                 total += kernel->array[j] *
                          accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
