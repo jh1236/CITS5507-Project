@@ -54,7 +54,7 @@ int conv2dParallel(
                 total += kernel->array[j] *
                          accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
-            output->array[y * feature->height + x] = total;
+            output->array[y * feature->width + x] = total;
         }
     }
 
