@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
             .algorithm = 0
     };
     setConfig(argc, argv, &config);
+    printf("OpenMP max threads = %d\n", omp_get_max_threads());
     printf("Successfully Loaded config\n");
     test(&config);
     if (config.outputFilePath != NULL) {
