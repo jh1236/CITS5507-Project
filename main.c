@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "convolve.h"
 #include "argHandler.h"
-#include <time.h>
 #include <omp.h>
 
 
@@ -55,6 +54,6 @@ void test(Config *config) {
 
     double end = omp_get_wtime();
     printf("Strategy: %s\n", NAMES[config->algorithm]);
-    printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC);
+    printf("Time Taken (Seconds): %f\n", (double) (end - begin));
 }
 
