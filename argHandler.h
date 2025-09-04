@@ -7,6 +7,15 @@
 
 #include "Matrix.h"
 
+enum Algorithm {
+    STATIC,
+    DYNAMIC,
+    GUIDED,
+    COLLAPSE_STATIC,
+    LINEAR
+};
+
+
 typedef struct config {
     Matrix *feature;
     Matrix *kernel;
@@ -14,6 +23,7 @@ typedef struct config {
     char *featureFilePath;
     char *kernelFilePath;
     char *outputFilePath;
+    enum Algorithm algorithm;
 } Config;
 
 void setConfig(int argc, char **argV, Config *config);

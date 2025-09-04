@@ -35,7 +35,7 @@ void setConfig(int argc, char **argv, Config *config) {
     int H = -1, W = -1, kH = -1, kW = -1;
     int opt;
     srand(time(NULL));
-    while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:")) != -1) {
+    while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:a:")) != -1) {
         switch (opt) {
             case 'f': {
                 unsigned int len = strlen(optarg);
@@ -67,10 +67,13 @@ void setConfig(int argc, char **argv, Config *config) {
             case 'y':
                 kW = strtol(optarg, NULL, 10);
                 break;
+            case 'a':
+                config->algorithm = (int) strtol(optarg, NULL, 10) - 1;
+                break;
 
             default:
                 fprintf(stderr,
-                        "Usage: %s -f [feature.txt] -g [kernel.txt] -o [output.txt] -H [feature height] -W [feature width] -x [kernel width] -y [kernel height] \n",
+                        "Usage: %s -f [feature.txt] -g [kernel.txt] -o [output.txt] -H [feature height] -W [feature width] -x [kernel width] -y [kernel height] -a [Algorithm #]\n",
                         argv[0]);
                 exit(EXIT_FAILURE);
         }

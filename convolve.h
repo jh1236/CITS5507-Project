@@ -7,10 +7,36 @@
 
 #include "Matrix.h"
 
-int conv2d(
-        Matrix *feature,
-        Matrix *kernel,
-        Matrix *output
+
+int conv2dStatic(
+    Matrix *feature,
+    Matrix *kernel,
+    Matrix *output
 );
+
+int conv2dDynamic(
+    Matrix *feature,
+    Matrix *kernel,
+    Matrix *output
+);
+
+int conv2dGuided(
+    Matrix *feature,
+    Matrix *kernel,
+    Matrix *output
+);
+
+int conv2dCollapseStatic(
+    Matrix *feature,
+    Matrix *kernel,
+    Matrix *output
+);
+
+int conv2dLinear(
+    Matrix *feature,
+    Matrix *kernel,
+    Matrix *output
+);
+
 
 #endif //CITS5507PROJECT_CONVOLVE_H
