@@ -55,7 +55,7 @@ Matrix *readMatrixFromFile(const char *filename) {
     }
 
     long width, height;
-    if (fscanf(file, "%li %li", &width, &height) != 2) {
+    if (fscanf(file, "%li %li", &height, &width) != 2) {
         fprintf(stderr, "Failed to read matrix dimensions\n");
         fclose(file);
         exit(EXIT_FAILURE);
