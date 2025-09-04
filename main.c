@@ -50,6 +50,7 @@ void test(Config *config) {
     }
 
     clock_t end = clock();
+    printf("Strategy: %s\n", NAMES[config->algorithm]);
     printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC);
 }
 
