@@ -32,15 +32,19 @@ void test(Config *config) {
 
     switch (config->algorithm) {
         case STATIC:
+            omp_set_num_threads(10);
             conv2dStatic(config->feature, config->kernel, config->output);
             break;
         case DYNAMIC:
+            omp_set_num_threads(10);
             conv2dDynamic(config->feature, config->kernel, config->output);
             break;
         case GUIDED:
+            omp_set_num_threads(10);
             conv2dGuided(config->feature, config->kernel, config->output);
             break;
         case COLLAPSE_STATIC:
+            omp_set_num_threads(10);
             conv2dCollapseStatic(config->feature, config->kernel, config->output);
             break;
         case LINEAR:

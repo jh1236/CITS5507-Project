@@ -42,3 +42,21 @@ data structure that would improve the cache hits. (My understanding about 2D arr
 arrays in memory anyway, and no other data structure really made sense.)
 
 ## Performance Metrics and analysis of solution
+
+Running both the parallel & linear 
+
+Strategy: STATIC
+Time Taken (Seconds): 526.404774
+
+Strategy: DYNAMIC
+Time Taken (Seconds): 525.822754
+
+Strategy: GUIDED
+Time Taken (Seconds): 525.136301
+
+Strategy: COLLAPSE_STATIC
+Time Taken (Seconds): 522.211076
+
+Successfully Loaded config
+Strategy: LINEAR
+Time Taken (Seconds): 525.951473
