@@ -15,6 +15,13 @@
 #include "argHandler.h"
 #include "Matrix.h"
 
+const char *NAMES[5] = {
+        "STATIC",
+        "DYNAMIC",
+        "GUIDED",
+        "COLLAPSE_STATIC",
+        "LINEAR",
+};
 
 void deleteConfig(Config *config) {
     free(config->featureFilePath);

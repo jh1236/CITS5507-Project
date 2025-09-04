@@ -15,13 +15,7 @@ enum Algorithm {
     LINEAR
 };
 
-const char *NAMES[5] = {
-        "STATIC",
-        "DYNAMIC",
-        "GUIDED",
-        "COLLAPSE_STATIC",
-        "LINEAR",
-};
+extern const char *NAMES[5];
 
 typedef struct config {
     Matrix *feature;
