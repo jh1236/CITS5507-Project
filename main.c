@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 }
 
 void test(Config *config) {
-    clock_t begin = clock();
+    double begin = omp_get_wtime();
 
     switch (config->algorithm) {
         case STATIC:
@@ -49,7 +49,7 @@ void test(Config *config) {
             break;
     }
 
-    clock_t end = clock();
+    double end = omp_get_wtime();
     printf("Strategy: %s\n", NAMES[config->algorithm]);
     printf("Time Taken (Seconds): %f\n", (double) (end - begin) / CLOCKS_PER_SEC);
 }
