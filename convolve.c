@@ -8,9 +8,9 @@
 
 
 int conv2dStatic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -37,7 +37,7 @@ int conv2dStatic(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
             output->array[y * feature->width + x] = total;
         }
@@ -47,9 +47,9 @@ int conv2dStatic(
 }
 
 int conv2dDynamic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -76,7 +76,7 @@ int conv2dDynamic(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
             output->array[y * feature->width + x] = total;
         }
@@ -86,9 +86,9 @@ int conv2dDynamic(
 }
 
 int conv2dGuided(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -115,7 +115,7 @@ int conv2dGuided(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
             output->array[y * feature->width + x] = total;
         }
@@ -125,9 +125,9 @@ int conv2dGuided(
 }
 
 int conv2dCollapseStatic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -147,7 +147,7 @@ int conv2dCollapseStatic(
     }
     //clang spits the dummy if this isn't default(none)
     //set the size to 100 so that we don't get false sharing
-#pragma omp parallel for default(none) shared(feature, kernel, output) schedule(static, 100) collapse(2)
+#pragma omp parallel for default(none) shared(feature, kernel, output) schedule(static, 200) collapse(2)
     for (long x = 0; x < feature->width; ++x) {
         for (long y = 0; y < feature->height; ++y) {
             float total = 0;
@@ -155,7 +155,7 @@ int conv2dCollapseStatic(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
             output->array[y * feature->width + x] = total;
         }
@@ -166,9 +166,9 @@ int conv2dCollapseStatic(
 
 
 int conv2dLinear(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -186,8 +186,7 @@ int conv2dLinear(
         fprintf(stderr, "Feature is smaller than kernel");
         return 0;
     }
-    //clang spits the dummy if this isn't default(none)
-    //set the size to 100 so that we don't get false sharing
+
     for (long x = 0; x < feature->width; ++x) {
         for (long y = 0; y < feature->height; ++y) {
             float total = 0;
@@ -195,7 +194,7 @@ int conv2dLinear(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
             }
             output->array[y * feature->width + x] = total;
         }

@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
             .feature = NULL,
             .algorithm = 0
     };
-    setConfig(argc, argv, &config);
     printf("OpenMP max threads = %d\n", omp_get_max_threads());
+    setConfig(argc, argv, &config);
     printf("Successfully Loaded config\n");
     test(&config);
     if (config.outputFilePath != NULL) {
@@ -29,26 +29,22 @@ int main(int argc, char **argv) {
 
 void test(Config *config) {
     double begin = omp_get_wtime();
-
+    //1.635000
+    omp_set_num_threads(omp_get_max_threads());
     switch (config->algorithm) {
         case STATIC:
-            omp_set_num_threads(10);
             conv2dStatic(config->feature, config->kernel, config->output);
             break;
         case DYNAMIC:
-            omp_set_num_threads(10);
             conv2dDynamic(config->feature, config->kernel, config->output);
             break;
         case GUIDED:
-            omp_set_num_threads(10);
             conv2dGuided(config->feature, config->kernel, config->output);
             break;
         case COLLAPSE_STATIC:
-            omp_set_num_threads(10);
             conv2dCollapseStatic(config->feature, config->kernel, config->output);
             break;
         case LINEAR:
-            omp_set_num_threads(1);
             conv2dLinear(config->feature, config->kernel, config->output);
             break;
     }

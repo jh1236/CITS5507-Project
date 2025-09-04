@@ -39,7 +39,7 @@ void deleteConfig(Config *config) {
  * Takes a blank config and initialises it based on the programs args 
  */
 void setConfig(int argc, char **argv, Config *config) {
-    int H = -1, W = -1, kH = -1, kW = -1;
+    long H = -1, W = -1, kH = -1, kW = -1;
     int opt;
     srand(time(NULL));
     while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:a:")) != -1) {
