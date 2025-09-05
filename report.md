@@ -43,20 +43,31 @@ arrays in memory anyway, and no other data structure really made sense.)
 
 ## Performance Metrics and analysis of solution
 
-Running both the parallel & linear 
+To test the performance of my algorithm, I wrote 5 competing algorithms, all of which could be run by a command flag (
+see the README). However, when I first did this, I ran into a very strange issue: No matter what strategy I used, I
+seemed to get the same results. This wasn't happening on my pc when I tested locally, but only on Kaya, which was the
+most frustrating part. Obviously, this couldn't be right, but it seemed that everything I tried didn't change the speed
+that each strategy ran on. However, I found a [paper on github](https://atharva253.github.io/data/hpp_cnn.pdf) that
+analysed an algorithm doing matrix convolutions. I'll admit that most of this paper I didn't understand, but it had a
+graph on page 4 that showed a massive drop after 8 cpus were used, and I was using 10. After changing my cpus to 8, I
+discovered the speedup that I expected. I then ran 2 stress tests on each algorithm, first with a 10k by 10k feature map
+with a 5 by 5 kernel and then with a 50k by 50k feature map and a 20 by 20 kernel. The results are in the table below.
 
-Strategy: STATIC
-Time Taken (Seconds): 526.404774
+| Test          | Static     | Dynamic    | Guided     | Static_Collapse | Linear      |
+|---------------|------------|------------|------------|-----------------|-------------|
+| 10k*10k       | 1.378844   | 2.889291   | 1.357622   | 1.288325        | 9.866833    |
+| 50k*50k       | 551.771156 | 520.999243 | 521.617569 | 561.596240      | 4471.680480 |
+| 10k vs Linear | 7.155      | 3.415      | 7.268      | 7.659           | 1           |
+| 50k vs Linear | 8.104      | 8.583      | 8.573      | 7.962           | 1           |
 
-Strategy: DYNAMIC
-Time Taken (Seconds): 525.822754
+### Explaining each algorithm
 
-Strategy: GUIDED
-Time Taken (Seconds): 525.136301
+#### Static
 
-Strategy: COLLAPSE_STATIC
-Time Taken (Seconds): 522.211076
+The static algorithm that I used is simply just a naïve implementation, with a few measures to try and avoid false
+sharing. The outer for loop is parallelised using the `omp parallel for` directive, then specified to use static (which
+is the default behaviour), but the inner loop is not parallelised, which is to help avoid false sharing. Another way
+that false sharing is prevented is by putting the matrix y loop outside the matrix x loop, meaning that the array access
+should be seperated by the width of the array, preventing different threads accessing the same data. The static solution
 
-Successfully Loaded config
-Strategy: LINEAR
-Time Taken (Seconds): 525.951473
+#### Dynamic
