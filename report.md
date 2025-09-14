@@ -10,9 +10,8 @@ in `convolve.c`. The iteration has been left in 2 dimensions and not collapsed i
 sharing occurs, as the memory that each thread will be working on will not be close in memory. This could theoretically
 lead to performance to very tall or very wide arrays, but those cases are not common use cases (when I say tall or wide
 I mean like 5 or 6 on the short dimension - not very practical). Another consideration was the schedule method to use. I
-tested the file on schedule static as well as guided and dynamic and decided to use
-
-# TODO PUT THE RESULTS HERE
+tested the file on schedule static as well as guided and dynamic and found that the dynamic allocation performed best at
+large matrix sizes.
 
 ## Description of How I am Representing My Arrays
 
@@ -71,3 +70,24 @@ that false sharing is prevented is by putting the matrix y loop outside the matr
 should be seperated by the width of the array, preventing different threads accessing the same data. The static solution
 
 #### Dynamic
+
+The dynamic allocator also showed a large speed-up, maxing out ay 8x the linear approach. It is almost identical to the
+static implementation, with the only difference being the `pragma` directive specifying that the for loop is to use
+dynamic. The dynamic allocator underperformed at lower matrix size, but performed marginally better at the larger matrix
+size, which makes sense as the dynamic allocation adds scheduling overhead to the runtime, which is felt more at smaller
+loads, and then helps to improve performance at higher loads.
+
+#### Guided
+
+The guided allocator was once again a carbon copy of the other two, using the `guided` allocator instead. It showed the
+best performance over both tests, being able to almost match the dynamic solution in the second test and the
+static_collapse allocator in the first. This can be understood by the fact that the guided allocator has been optimised
+by the OMP library to best attempt to provide the performance of dynamic without as much of the overhead.
+
+#### Static Collapse
+
+The other method that I tried was using the static allocator with collapse. The reason that I had steered away from
+collapse earlier is over false sharing concerns, but the best way to know if that would be an issue would be to run test
+it. After testing, it seemed that false sharing was not an issue (as the speed-up was still close to the 8x speed up
+expected), but that it was not as fast as any other strategy on the larger data set. I'm not exactly sure what lead
+this strategy to not scale as well, but it was interesting to try nonetheless.  
