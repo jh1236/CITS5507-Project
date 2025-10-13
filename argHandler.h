@@ -21,8 +21,8 @@ typedef struct config {
     Matrix *feature;
     Matrix *kernel;
     Matrix *output;
-    int sx;
-    int sy;
+    int sw;
+    int sh;
     char *featureFilePath;
     char *kernelFilePath;
     char *outputFilePath;

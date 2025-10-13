@@ -99,8 +99,14 @@ void setConfig(int argc, char **argv, Config *config) {
             fprintf(stderr, "Passing -H requires passing -W and vice versa");
             exit(EXIT_FAILURE);
         }
-        Matrix *output = newMatrix(H / sh, W / sw);
         Matrix *feature = newMatrix(H, W);
+        int outputW = H / sw, outputH = W / sh;
+
+        // if the division is not clean, we need to add one (so the partial row is calculated)
+        if (H % sh != 0) outputH++;
+        if (W % sw != 0) outputW++;
+
+        Matrix *output = newMatrix(outputH, outputW);
         for (int i = 0; i < H * W; ++i) {
             feature->array[i] = (float) rand() / (float) (RAND_MAX);
         }
@@ -111,7 +117,12 @@ void setConfig(int argc, char **argv, Config *config) {
         }
     } else if (config->featureFilePath != NULL) {
         config->feature = readMatrixFromFile(config->featureFilePath);
-        config->output = newMatrix(config->feature->height / sh, config->feature->width / sw);
+        int outputW = config->feature->height / sw, outputH = config->feature->width / sh;
+
+        // if the division is not clean, we need to add one (so the partial row is calculated)
+        if (H % sh != 0) outputH++;
+        if (W % sw != 0) outputW++;
+        config->output = newMatrix(outputH, outputW);
     } else {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
@@ -135,16 +146,15 @@ void setConfig(int argc, char **argv, Config *config) {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
     }
-    
+
     if (sw > config->feature->width || sh > config->feature->height) {
         fprintf(stderr, "The stride must be smaller than the matrix!");
         exit(EXIT_FAILURE);
     } else {
-        config->sx = sw;
-        config->sy = sh;
+        config->sw = sw;
+        config->sh = sh;
     }
-    
-    
+
 
 }
 

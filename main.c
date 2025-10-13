@@ -39,16 +39,16 @@ void test(Config *config) {
     switch (config->algorithm) {
 
         case LINEAR:
-            conv2dLinear(config->feature, config->kernel, config->sx, config->sy, config->output);
+            conv2dLinear(config->feature, config->kernel, config->sw, config->sh, config->output);
             break;
         case OPENMP:
-            conv2dOpenMP(config->feature, config->kernel, config->sx, config->sy, config->output);
+            conv2dOpenMP(config->feature, config->kernel, config->sw, config->sh, config->output);
             break;
         case MPI:
-            conv2dMPI(config->feature, config->kernel, config->sx, config->sy, config->output);
+            conv2dMPI(config->feature, config->kernel, config->sw, config->sh, config->output);
             break;
         case BOTH:
-            conv2dMPIAndOpenMP(config->feature, config->kernel, config->sx, config->sy, config->output);
+            conv2dMPIAndOpenMP(config->feature, config->kernel, config->sw, config->sh, config->output);
             break;
     }
 

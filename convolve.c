@@ -31,7 +31,7 @@ int conv2dOpenMP(
         return 0;
     }
     // clang spits the dummy if this isn't default(none)
-    // sx and sy could be first-private here, but shared should be more performant
+    // sw and sh could be first-private here, but shared should be more performant
 #pragma omp parallel for default(none) shared(sx, sy, feature, kernel, output) schedule(dynamic)
     for (long x = 0; x < output->width; x++) {
         for (long y = 0; y < output->height; y++) {
@@ -79,7 +79,8 @@ int conv2dLinear(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                         accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2), (sh * y) + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
+                                            (sh * y) + (kY - kernel->height / 2));
             }
             output->array[y * output->width + x] = total;
         }
@@ -111,16 +112,17 @@ int conv2dMPI(
         return 0;
     }
 
-    for (long x = 0; x < feature->width; x++) {
-        for (long y = 0; y < feature->height; y++) {
+    for (long x = 0; x < output->width; x++) {
+        for (long y = 0; y < output->height; y++) {
             float total = 0;
             for (long j = 0; j < kernel->width * kernel->height; ++j) {
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2), (sh * y) + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
+                                            (sh * y) + (kY - kernel->height / 2));
             }
-            output->array[y * feature->width + x] = total;
+            output->array[y * output->width + x] = total;
         }
     }
 
@@ -150,16 +152,17 @@ int conv2dMPIAndOpenMP(
         return 0;
     }
 
-    for (long x = 0; x < feature->width; x++) {
-        for (long y = 0; y < feature->height; y++) {
+    for (long x = 0; x < output->width; x++) {
+        for (long y = 0; y < output->height; y++) {
             float total = 0;
             for (long j = 0; j < kernel->width * kernel->height; ++j) {
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2), (sh * y) + (kY - kernel->height / 2));
+                         accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
+                                            (sh * y) + (kY - kernel->height / 2));
             }
-            output->array[y * feature->width + x] = total;
+            output->array[y * output->width + x] = total;
         }
     }
 
