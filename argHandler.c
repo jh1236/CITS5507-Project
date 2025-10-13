@@ -41,10 +41,10 @@ void deleteConfig(Config *config) {
  * Takes a blank config and initialises it based on the programs args 
  */
 void setConfig(int argc, char **argv, Config *config) {
-    long H = -1, W = -1, kH = -1, kW = -1, sx = 1, sy = 1;
+    long H = -1, W = -1, kH = -1, kW = -1, sw = 1, sh = 1;
     int opt;
     srand(time(NULL));
-    while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:a:")) != -1) {
+    while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:a:s:p:")) != -1) {
         switch (opt) {
             case 'f': {
                 unsigned int len = strlen(optarg);
@@ -77,10 +77,10 @@ void setConfig(int argc, char **argv, Config *config) {
                 kW = strtol(optarg, NULL, 10);
                 break;
             case 's':
-                sx = strtol(optarg, NULL, 10);
+                sw = strtol(optarg, NULL, 10);
                 break;
             case 'p':
-                sy = strtol(optarg, NULL, 10);
+                sh = strtol(optarg, NULL, 10);
                 break;
             case 'a':
                 config->algorithm = (int) strtol(optarg, NULL, 10) - 1;
@@ -94,21 +94,12 @@ void setConfig(int argc, char **argv, Config *config) {
         }
     }
 
-
-    if (sx > W || sy > H) {
-        fprintf(stderr, "The stride must be smaller than the matrix!");
-        exit(EXIT_FAILURE);
-    } else {
-        config->sx = sx;
-        config->sy = sy;
-    }
-    
     if (H > 0 || W > 0) {
         if (H == -1 || W == -1) {
             fprintf(stderr, "Passing -H requires passing -W and vice versa");
             exit(EXIT_FAILURE);
         }
-        Matrix *output = newMatrix(H / sx, W / sy);
+        Matrix *output = newMatrix(H / sh, W / sw);
         Matrix *feature = newMatrix(H, W);
         for (int i = 0; i < H * W; ++i) {
             feature->array[i] = (float) rand() / (float) (RAND_MAX);
@@ -120,7 +111,7 @@ void setConfig(int argc, char **argv, Config *config) {
         }
     } else if (config->featureFilePath != NULL) {
         config->feature = readMatrixFromFile(config->featureFilePath);
-        config->output = newMatrix(config->feature->height / sx, config->feature->width / sy);
+        config->output = newMatrix(config->feature->height / sh, config->feature->width / sw);
     } else {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
@@ -144,6 +135,16 @@ void setConfig(int argc, char **argv, Config *config) {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
     }
+    
+    if (sw > config->feature->width || sh > config->feature->height) {
+        fprintf(stderr, "The stride must be smaller than the matrix!");
+        exit(EXIT_FAILURE);
+    } else {
+        config->sx = sw;
+        config->sy = sh;
+    }
+    
+    
 
 }
 

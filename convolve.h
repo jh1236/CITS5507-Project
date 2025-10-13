@@ -19,21 +19,21 @@ int conv2dOpenMP(
 int conv2dMPI(
         Matrix *feature,
         Matrix *kernel,
-        int sx, int sy,
+        int sw, int sh,
         Matrix *output
 );
 
 int conv2dMPIAndOpenMP(
         Matrix *feature,
         Matrix *kernel,
-        int sx, int sy,
+        int sw, int sh,
         Matrix *output
 );
 
 int conv2dLinear(
         Matrix *feature,
         Matrix *kernel,
-        int sx, int sy,
+        int sh, int sw,
         Matrix *output
 );
 
