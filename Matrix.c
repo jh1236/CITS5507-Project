@@ -1,5 +1,6 @@
 //
-// Created by healy on 2/09/2025.
+//  CITS 5507 2025 S2
+//  Jared Healy (23398223)
 //
 
 #include <malloc.h>

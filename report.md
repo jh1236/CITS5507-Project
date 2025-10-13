@@ -90,4 +90,4 @@ The other method that I tried was using the static allocator with collapse. The 
 collapse earlier is over false sharing concerns, but the best way to know if that would be an issue would be to run test
 it. After testing, it seemed that false sharing was not an issue (as the speed-up was still close to the 8x speed up
 expected), but that it was not as fast as any other strategy on the larger data set. I'm not exactly sure what lead
-this strategy to not scale as well, but it was interesting to try nonetheless.  
+this strategy to not scale as well, but it was interesting to try nonetheless.

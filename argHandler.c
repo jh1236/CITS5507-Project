@@ -1,10 +1,12 @@
+//
+//  CITS 5507 2025 S2
+//  Jared Healy (23398223)
+//
+
 #pragma clang diagnostic push
 //it doesn't like the way I generate random numbers
 #pragma ide diagnostic ignored "cert-msc51-cpp"
 #pragma ide diagnostic ignored "cert-msc50-cpp"
-//
-// Created by healy on 1/09/2025.
-//
 
 #include <malloc.h>
 #include <getopt.h>

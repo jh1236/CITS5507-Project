@@ -1,3 +1,8 @@
+//
+//  CITS 5507 2025 S2
+//  Jared Healy (23398223)
+//
+
 #include <stdio.h>
 #include "convolve.h"
 #include "argHandler.h"

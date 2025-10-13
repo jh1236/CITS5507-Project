@@ -8,8 +8,6 @@ add_executable(CITS5507Project
         main.c
         convolve.c
         convolve.h
-        fileHelper.c
-        fileHelper.h
         argHandler.c
         argHandler.h
         Matrix.c

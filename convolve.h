@@ -1,5 +1,6 @@
 //
-// Created by healy on 1/09/2025.
+//  CITS 5507 2025 S2
+//  Jared Healy (23398223)
 //
 
 #ifndef CITS5507PROJECT_CONVOLVE_H
