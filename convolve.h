@@ -9,34 +9,32 @@
 #include "Matrix.h"
 
 
-int conv2dStatic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+int conv2dOpenMP(
+        Matrix *feature,
+        Matrix *kernel,
+        int sx, int sy,
+        Matrix *output
 );
 
-int conv2dDynamic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+int conv2dMPI(
+        Matrix *feature,
+        Matrix *kernel,
+        int sx, int sy,
+        Matrix *output
 );
 
-int conv2dGuided(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
-);
-
-int conv2dCollapseStatic(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+int conv2dMPIAndOpenMP(
+        Matrix *feature,
+        Matrix *kernel,
+        int sx, int sy,
+        Matrix *output
 );
 
 int conv2dLinear(
-    Matrix *feature,
-    Matrix *kernel,
-    Matrix *output
+        Matrix *feature,
+        Matrix *kernel,
+        int sx, int sy,
+        Matrix *output
 );
 
 

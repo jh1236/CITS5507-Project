@@ -41,7 +41,7 @@ void deleteConfig(Config *config) {
  * Takes a blank config and initialises it based on the programs args 
  */
 void setConfig(int argc, char **argv, Config *config) {
-    long H = -1, W = -1, kH = -1, kW = -1;
+    long H = -1, W = -1, kH = -1, kW = -1, sx = 1, sy = 1;
     int opt;
     srand(time(NULL));
     while ((opt = getopt(argc, argv, "f:g:o:H:W:x:y:a:")) != -1) {
@@ -76,23 +76,39 @@ void setConfig(int argc, char **argv, Config *config) {
             case 'y':
                 kW = strtol(optarg, NULL, 10);
                 break;
+            case 's':
+                sx = strtol(optarg, NULL, 10);
+                break;
+            case 'p':
+                sy = strtol(optarg, NULL, 10);
+                break;
             case 'a':
                 config->algorithm = (int) strtol(optarg, NULL, 10) - 1;
                 break;
 
             default:
                 fprintf(stderr,
-                        "Usage: %s -f [feature.txt] -g [kernel.txt] -o [output.txt] -H [feature height] -W [feature width] -x [kernel width] -y [kernel height] -a [Algorithm #]\n",
+                        "Usage: %s -f [feature.txt] -g [kernel.txt] -o [output.txt] -H [feature height] -W [feature width] -x [kernel width] -y [kernel height] -s [stride x] -p [stride y] -a [Algorithm #]\n",
                         argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
+
+
+    if (sx > W || sy > H) {
+        fprintf(stderr, "The stride must be smaller than the matrix!");
+        exit(EXIT_FAILURE);
+    } else {
+        config->sx = sx;
+        config->sy = sy;
+    }
+    
     if (H > 0 || W > 0) {
         if (H == -1 || W == -1) {
             fprintf(stderr, "Passing -H requires passing -W and vice versa");
             exit(EXIT_FAILURE);
         }
-        Matrix *output = newMatrix(H, W);
+        Matrix *output = newMatrix(H / sx, W / sy);
         Matrix *feature = newMatrix(H, W);
         for (int i = 0; i < H * W; ++i) {
             feature->array[i] = (float) rand() / (float) (RAND_MAX);
@@ -104,7 +120,7 @@ void setConfig(int argc, char **argv, Config *config) {
         }
     } else if (config->featureFilePath != NULL) {
         config->feature = readMatrixFromFile(config->featureFilePath);
-        config->output = newMatrix(config->feature->height, config->feature->width);
+        config->output = newMatrix(config->feature->height / sx, config->feature->width / sy);
     } else {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
@@ -128,6 +144,7 @@ void setConfig(int argc, char **argv, Config *config) {
         fprintf(stderr, "You must specify either a random size for feature or a file input.");
         exit(EXIT_FAILURE);
     }
+
 }
 
 #pragma clang diagnostic pop

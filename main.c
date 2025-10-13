@@ -37,20 +37,18 @@ void test(Config *config) {
     //1.635000
     omp_set_num_threads(omp_get_max_threads());
     switch (config->algorithm) {
-        case STATIC:
-            conv2dStatic(config->feature, config->kernel, config->output);
-            break;
-        case DYNAMIC:
-            conv2dDynamic(config->feature, config->kernel, config->output);
-            break;
-        case GUIDED:
-            conv2dGuided(config->feature, config->kernel, config->output);
-            break;
-        case COLLAPSE_STATIC:
-            conv2dCollapseStatic(config->feature, config->kernel, config->output);
-            break;
+
         case LINEAR:
-            conv2dLinear(config->feature, config->kernel, config->output);
+            conv2dLinear(config->feature, config->kernel, config->sx, config->sy, config->output);
+            break;
+        case OPENMP:
+            conv2dOpenMP(config->feature, config->kernel, config->sx, config->sy, config->output);
+            break;
+        case MPI:
+            conv2dMPI(config->feature, config->kernel, config->sx, config->sy, config->output);
+            break;
+        case BOTH:
+            conv2dMPIAndOpenMP(config->feature, config->kernel, config->sx, config->sy, config->output);
             break;
     }
 

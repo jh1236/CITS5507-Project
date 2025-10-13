@@ -9,11 +9,10 @@
 #include "Matrix.h"
 
 enum Algorithm {
-    STATIC,
-    DYNAMIC,
-    GUIDED,
-    COLLAPSE_STATIC,
-    LINEAR
+    LINEAR,
+    OPENMP,
+    MPI,
+    BOTH
 };
 
 extern const char *NAMES[5];
@@ -22,6 +21,8 @@ typedef struct config {
     Matrix *feature;
     Matrix *kernel;
     Matrix *output;
+    int sx;
+    int sy;
     char *featureFilePath;
     char *kernelFilePath;
     char *outputFilePath;
