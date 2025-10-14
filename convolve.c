@@ -150,7 +150,7 @@ int conv2dMPI(
         //we can cheat a little bit here because we know out rank
         MPI_Gatherv(output, upper, MPI_FLOAT, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
-        MPI_Gatherv(&output[lower], upper - lower, MPI_FLOAT, NULL, NULL, NULL, 0, MPI_COMM_WORLD);
+        MPI_Gatherv(&output[lower], upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
     MPI_Finalize();
     return 1;
