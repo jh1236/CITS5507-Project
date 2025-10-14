@@ -4,7 +4,7 @@
 #
 
 CC=mpicc
-CFLAGS=-I.
+CFLAGS=-I. -fopenmp
 DEPS = argHandler.h convolve.h Matrix.h
 OBJ = argHandler.o convolve.o Matrix.o main.o
 
