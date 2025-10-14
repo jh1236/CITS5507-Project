@@ -3,6 +3,7 @@
 #  Jared Healy (23398223)
 #
 
+CC=mpicc
 CFLAGS=-I.
 DEPS = argHandler.h convolve.h Matrix.h
 OBJ = argHandler.o convolve.o Matrix.o main.o

@@ -3,8 +3,9 @@
 //  Jared Healy (23398223)
 //
 
-#include <stdio.h>
 #include "convolve.h"
+#include <mpi.h>
+#include <stdio.h>
 #include "Matrix.h"
 
 
