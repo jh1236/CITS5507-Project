@@ -84,34 +84,7 @@ void setConfig(int argc, char **argv, Config *config) {
                 sh = strtol(optarg, NULL, 10);
                 break;
             case 'a': {
-                errno = 0;
-                long result = strtol(optarg, NULL, 10) - 1;
-                if ((result == LONG_MAX || result == LONG_MIN) && errno == ERANGE) {
-                    switch (optarg[0]) {
-                        case 'l':
-                        case 'L':
-                            config->algorithm = 1;
-                            break;
-                        case 'o':
-                        case 'O':
-                            config->algorithm = 2;
-                            break;
-                        case 'm':
-                        case 'M':
-                            config->algorithm = 3;
-                            break;
-                        case 'b':
-                        case 'B':
-                            config->algorithm = 4;
-                            break;
-                        default: fprintf(stderr,
-                                         "Unrecognised Algorithm Signifier: %s",
-                                         argv[0]);
-                            exit(EXIT_FAILURE);
-                    }
-                } else {
-                    config->algorithm = (int) result;    
-                }
+                config->algorithm = (int) strtol(optarg, NULL, 10) - 1;
             }
             break;
 
@@ -129,7 +102,7 @@ void setConfig(int argc, char **argv, Config *config) {
             exit(EXIT_FAILURE);
         }
         Matrix *feature = newMatrix(H, W);
-        int outputW = H / sw, outputH = W / sh;
+        int outputW = H / sh, outputH = W / sw;
 
         // if the division is not clean, we need to add one (so the partial row is calculated)
         if (H % sh != 0) outputH++;
@@ -179,10 +152,9 @@ void setConfig(int argc, char **argv, Config *config) {
     if (sw > config->feature->width || sh > config->feature->height) {
         fprintf(stderr, "The stride must be smaller than the matrix!");
         exit(EXIT_FAILURE);
-    } else {
-        config->sw = sw;
-        config->sh = sh;
     }
+    config->sw = sw;
+    config->sh = sh;
 }
 
 #pragma clang diagnostic pop

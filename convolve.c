@@ -11,9 +11,9 @@
 
 int conv2dOpenMP(
     Matrix *feature,
-    Matrix *kernel,
-    int sx, int sy,
-    Matrix *output
+    const Matrix *kernel,
+    int sw, int sh,
+    const Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -33,7 +33,7 @@ int conv2dOpenMP(
     }
     // clang spits the dummy if this isn't default(none)
     // sw and sh could be first-private here, but shared should be more performant
-#pragma omp parallel for default(none) shared(sx, sy, feature, kernel, output) schedule(dynamic)
+#pragma omp parallel for default(none) shared(sw, sh, feature, kernel, output) schedule(dynamic)
     for (long x = 0; x < output->width; x++) {
         for (long y = 0; y < output->height; y++) {
             float total = 0;
@@ -52,9 +52,9 @@ int conv2dOpenMP(
 
 int conv2dLinear(
     Matrix *feature,
-    Matrix *kernel,
-    int sw, int sh,
-    Matrix *output
+    const Matrix *kernel,
+    const int sw, const int sh,
+    const Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -92,9 +92,9 @@ int conv2dLinear(
 
 int conv2dMPI(
     Matrix *feature,
-    Matrix *kernel,
-    int sw, int sh,
-    Matrix *output
+    const Matrix *kernel,
+    const int sw, const int sh,
+    const Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -143,21 +143,21 @@ int conv2dMPI(
         int displ[size];
         for (long i = 0; i < size; i++) {
             sizes[i] = (total_iterations * (i + 1)) / size - (total_iterations * i) / size;
-            displ[i] = (total_iterations * (i)) / size;
+            displ[i] = (total_iterations * i) / size;
         }
         MPI_Gatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, output->array, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
         MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
-    
+
     return 1;
 }
 
 int conv2dMPIAndOpenMP(
     Matrix *feature,
-    Matrix *kernel,
-    int sw, int sh,
-    Matrix *output
+    const Matrix *kernel,
+    const int sw, const int sh,
+    const Matrix *output
 ) {
     if (feature == NULL) {
         fprintf(stderr, "No Passed Feature");
@@ -187,6 +187,7 @@ int conv2dMPIAndOpenMP(
         upper = total_iterations;
     }
 
+#pragma omp parallel for default(none) shared(lower, upper, sw, sh, feature, kernel, output) schedule(dynamic)
     for (long i = lower; i < upper; i++) {
         int x = i % output->width;
         int y = i / output->width;
@@ -212,6 +213,6 @@ int conv2dMPIAndOpenMP(
     } else {
         MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
-    
+
     return 1;
 }
