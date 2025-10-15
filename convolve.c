@@ -135,17 +135,17 @@ int conv2dMPI(
                     accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
                                        (sh * y) + (kY - kernel->height / 2));
         }
-        output->array[y * output->width + i] = total;
+        output->array[i] = total;
     }
     if (rank == 0) {
         //we are the root process, and need to do a bit of extra work
         int sizes[size];
         int displ[size];
         for (long i = 0; i < size; i++) {
-            sizes[i] = (total_iterations * (rank + 1)) / size - (total_iterations * rank) / size;
-            displ[i] = (total_iterations * (rank)) / size;
+            sizes[i] = (total_iterations * (i + 1)) / size - (total_iterations * i) / size;
+            displ[i] = (total_iterations * (i)) / size;
         }
-        int recv[total_iterations];
+        float recv[total_iterations];
         //we can cheat a little bit here because we know our rank
         MPI_Gatherv(output, upper, MPI_FLOAT, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
