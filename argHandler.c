@@ -17,6 +17,7 @@
 #include "argHandler.h"
 #include "Matrix.h"
 #include <limits.h>
+#include <errno.h>
 
 const char *NAMES[4] = {
     "LINEAR",
