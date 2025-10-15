@@ -112,7 +112,6 @@ int conv2dMPI(
         fprintf(stderr, "Feature is smaller than kernel");
         return 0;
     }
-    MPI_Init(NULL, NULL);
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -152,7 +151,7 @@ int conv2dMPI(
     } else {
         MPI_Gatherv(output + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
-    MPI_Finalize();
+    
     return 1;
 }
 
