@@ -16,6 +16,7 @@
 #include <time.h>
 #include "argHandler.h"
 #include "Matrix.h"
+#include <limits.h>
 
 const char *NAMES[4] = {
     "LINEAR",
