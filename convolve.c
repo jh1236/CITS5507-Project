@@ -125,8 +125,8 @@ int conv2dMPI(
     }
 
     for (long i = lower; i < upper; i++) {
-        int x = i % kernel->width;
-        int y = i / kernel->width;
+        int x = i % output->width;
+        int y = i / output->width;
         float total = 0;
         for (long j = 0; j < kernel->width * kernel->height; ++j) {
             const int kX = j % kernel->width;
