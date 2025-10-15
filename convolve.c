@@ -145,9 +145,8 @@ int conv2dMPI(
             sizes[i] = (total_iterations * (i + 1)) / size - (total_iterations * i) / size;
             displ[i] = (total_iterations * (i)) / size;
         }
-        float recv[total_iterations];
         //we can cheat a little bit here because we know our rank
-        MPI_Gatherv(MPI_IN_PLACE, upper, MPI_DATATYPE_NULL, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
+        MPI_Gatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, output->array, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
         MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
