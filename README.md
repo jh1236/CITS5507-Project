@@ -25,11 +25,10 @@ y: Width of Kernel to randomly generate.
     If one is specified, the other MUST be specified!
     If specified, the width and height provided will be used to generate a random kernel.
 a: Selects the algorithm to use while running the program
-    1) Static
-    2) Dynamic
-    3) Guided
-    4) Collapse Static
-    5) Linear
+    1) [L]inear
+    2) [O]penMP
+    3) Open[M]PI
+    4) [B]oth
 ```
 
 # Matrix save format

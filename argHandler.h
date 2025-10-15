@@ -15,7 +15,7 @@ enum Algorithm {
     BOTH
 };
 
-extern const char *NAMES[5];
+extern const char *NAMES[4];
 
 typedef struct config {
     Matrix *feature;

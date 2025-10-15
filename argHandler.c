@@ -17,12 +17,11 @@
 #include "argHandler.h"
 #include "Matrix.h"
 
-const char *NAMES[5] = {
-        "STATIC",
-        "DYNAMIC",
-        "GUIDED",
-        "COLLAPSE_STATIC",
-        "LINEAR",
+const char *NAMES[4] = {
+    "LINEAR",
+    "OPENMP",
+    "MPI",
+    "MPI+OPENMP"
 };
 
 void deleteConfig(Config *config) {
@@ -82,9 +81,37 @@ void setConfig(int argc, char **argv, Config *config) {
             case 'p':
                 sh = strtol(optarg, NULL, 10);
                 break;
-            case 'a':
-                config->algorithm = (int) strtol(optarg, NULL, 10) - 1;
-                break;
+            case 'a': {
+                errno = 0;
+                long result = strtol(optarg, NULL, 10) - 1;
+                if ((result == LONG_MAX || result == LONG_MIN) && errno == ERANGE) {
+                    switch (optarg[0]) {
+                        case 'l':
+                        case 'L':
+                            config->algorithm = 1;
+                            break;
+                        case 'o':
+                        case 'O':
+                            config->algorithm = 2;
+                            break;
+                        case 'm':
+                        case 'M':
+                            config->algorithm = 3;
+                            break;
+                        case 'b':
+                        case 'B':
+                            config->algorithm = 4;
+                            break;
+                        default: fprintf(stderr,
+                                         "Unrecognised Algorithm Signifier: %s",
+                                         argv[0]);
+                            exit(EXIT_FAILURE);
+                    }
+                } else {
+                    config->algorithm = (int) result;    
+                }
+            }
+            break;
 
             default:
                 fprintf(stderr,
@@ -154,8 +181,6 @@ void setConfig(int argc, char **argv, Config *config) {
         config->sw = sw;
         config->sh = sh;
     }
-
-
 }
 
 #pragma clang diagnostic pop

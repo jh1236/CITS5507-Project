@@ -145,7 +145,6 @@ int conv2dMPI(
             sizes[i] = (total_iterations * (i + 1)) / size - (total_iterations * i) / size;
             displ[i] = (total_iterations * (i)) / size;
         }
-        //we can cheat a little bit here because we know our rank
         MPI_Gatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, output->array, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
         MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
@@ -161,35 +160,58 @@ int conv2dMPIAndOpenMP(
     Matrix *output
 ) {
     if (feature == NULL) {
-        fprintf(stderr, "No Passed Feature\n");
+        fprintf(stderr, "No Passed Feature");
         return 0;
     }
     if (kernel == NULL) {
-        fprintf(stderr, "No Passed Kernel\n");
+        fprintf(stderr, "No Passed Kernel");
         return 0;
     }
     if (output == NULL) {
-        fprintf(stderr, "No Passed Output\n");
+        fprintf(stderr, "No Passed Output");
         return 0;
     }
     if (feature->height < kernel->height || feature->width < kernel->width) {
-        fprintf(stderr, "Feature is smaller than kernel\n");
+        fprintf(stderr, "Feature is smaller than kernel");
         return 0;
     }
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    for (long x = 0; x < output->width; x++) {
-        for (long y = 0; y < output->height; y++) {
-            float total = 0;
-            for (long j = 0; j < kernel->width * kernel->height; ++j) {
-                const int kX = j % kernel->width;
-                const int kY = j / kernel->width;
-                total += kernel->array[j] *
-                        accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
-                                           (sh * y) + (kY - kernel->height / 2));
-            }
-            output->array[y * output->width + x] = total;
-        }
+    const int total_iterations = output->height * output->width;
+
+    int lower = (total_iterations * rank) / size;
+    int upper = (total_iterations * (rank + 1)) / size;
+    if (rank == size) {
+        upper = total_iterations;
     }
 
+    for (long i = lower; i < upper; i++) {
+        int x = i % output->width;
+        int y = i / output->width;
+        float total = 0;
+        for (long j = 0; j < kernel->width * kernel->height; ++j) {
+            const int kX = j % kernel->width;
+            const int kY = j / kernel->width;
+            total += kernel->array[j] *
+                    accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
+                                       (sh * y) + (kY - kernel->height / 2));
+        }
+        output->array[i] = total;
+    }
+    if (rank == 0) {
+        //we are the root process, and need to do a bit of extra work
+        int sizes[size];
+        int displ[size];
+        for (long i = 0; i < size; i++) {
+            sizes[i] = (total_iterations * (i + 1)) / size - (total_iterations * i) / size;
+            displ[i] = (total_iterations * (i)) / size;
+        }
+        MPI_Gatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, output->array, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    } else {
+        MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    }
+    
     return 1;
 }
