@@ -147,9 +147,9 @@ int conv2dMPI(
         }
         float recv[total_iterations];
         //we can cheat a little bit here because we know our rank
-        MPI_Gatherv(output, upper, MPI_FLOAT, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
+        MPI_Gatherv(MPI_IN_PLACE, upper, MPI_DATATYPE_NULL, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
-        MPI_Gatherv(output + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
+        MPI_Gatherv(output->array + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
     
     return 1;
