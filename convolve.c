@@ -133,7 +133,7 @@ int conv2dMPI(
             const int kX = j % kernel->width;
             const int kY = j / kernel->width;
             total += kernel->array[j] *
-                    accessMatrixOrZero(feature, (sw * i) + (kX - kernel->width / 2),
+                    accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
                                        (sh * y) + (kY - kernel->height / 2));
         }
         output->array[y * output->width + i] = total;
@@ -147,10 +147,10 @@ int conv2dMPI(
             displ[i] = (total_iterations * (rank)) / size;
         }
         int recv[total_iterations];
-        //we can cheat a little bit here because we know out rank
+        //we can cheat a little bit here because we know our rank
         MPI_Gatherv(output, upper, MPI_FLOAT, recv, sizes, displ, MPI_FLOAT, 0, MPI_COMM_WORLD);
     } else {
-        MPI_Gatherv(&output[lower], upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
+        MPI_Gatherv(output + lower, upper - lower, MPI_FLOAT, NULL, NULL, NULL, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
     MPI_Finalize();
     return 1;
