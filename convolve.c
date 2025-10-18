@@ -41,9 +41,10 @@ int conv2dOpenMP(
                 const int kX = j % kernel->width;
                 const int kY = j / kernel->width;
                 total += kernel->array[j] *
-                        accessMatrixOrZero(feature, x + (kX - kernel->width / 2), y + (kY - kernel->height / 2));
+                        accessMatrixOrZero(feature, (sw * x) + (kX - kernel->width / 2),
+                                           (sh * y) + (kY - kernel->height / 2));
             }
-            output->array[y * feature->width + x] = total;
+            output->array[y * output->width + x] = total;
         }
     }
 
